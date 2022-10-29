@@ -33,18 +33,55 @@ const createMedicos = async (req, res) => {
 	}
 };
 
-const updateMedicos = (req, res) => {
-	res.status(200).json({
-		ok: true,
-		msj: 'updateMedicos',
-	});
+const updateMedicos = async (req, res) => {
+	const id = req.params.id;
+	try {
+		const medicoDB = await Medico.findById(id);
+		if (!medicoDB) {
+			return res
+				.status(404)
+				.json({ ok: false, msj: 'No existe un medico con ese id' });
+		}
+
+		const { usuario, hospital, ...campos } = req.body;
+
+		const usuarioActualizado = await Medico.findOneAndUpdate(id, campos, {
+			new: true,
+		});
+
+		res.status(200).json({ ok: true, medico: usuarioActualizado });
+	} catch (error) {
+		console.log('updateMedicos error ', error);
+		res.status(500).json({
+			ok: false,
+			msj: 'ocurrion un error en updateMedicos',
+		});
+	}
 };
 
-const deleteMedicos = (req, res) => {
-	res.status(200).json({
-		ok: true,
-		msj: 'deleteMedicos',
-	});
+const deleteMedicos = async (req, res) => {
+	const id = req.params.id;
+	try {
+		const medicoDB = await Medico.findById(id);
+		if (!medicoDB) {
+			return res
+				.status(404)
+				.json({ ok: false, msj: 'No existe un medico con ese id' });
+		}
+
+		await Medico.findOneAndDelete(id);
+
+		res.status(200).json({
+			ok: true,
+			msj: 'medico eliminado ',
+		});
+	} catch (error) {
+		console.log('deleteMedicos error ', error);
+		res.status(500).json({
+			ok: false,
+			msj: 'ocurrion un error deleteMedicos',
+		});
+	}
 };
 
 module.exports = {
