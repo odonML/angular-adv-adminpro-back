@@ -7,6 +7,6 @@ const router = Router();
 router.use(fileUpload());
 
 router.put('/:tipo/:id', [validarJWT], uploadFile);
-router.get('/:tipo/:file', [validarJWT], getFile);
+router.get('/:tipo/:file', getFile);
 
 module.exports = router;

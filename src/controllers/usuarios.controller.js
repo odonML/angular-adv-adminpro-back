@@ -76,9 +76,16 @@ const updateUsuario = async (req, res) => {
 		}
 
 		campos.email = email;
-		const usuarioActualizado = await Usuario.findOneAndUpdate(id, campos, {
-			new: true,
-		});
+
+		const usuarioActualizado = await Usuario.findOneAndUpdate(
+			{ _id: id },
+			campos,
+			{
+				new: true,
+			}
+		);
+
+		// await Usuario.updateOne({ _id: id }, campos);
 
 		res.status(200).json({ ok: true, usuario: usuarioActualizado });
 	} catch (error) {
