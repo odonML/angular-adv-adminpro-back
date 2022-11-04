@@ -107,7 +107,7 @@ const deleteUsuario = async (req, res) => {
 				.json({ ok: false, msj: 'No existe un usuario conese id' });
 		}
 
-		await Usuario.findOneAndDelete(id);
+		await Usuario.findOneAndDelete({ _id: id });
 
 		res.status(200).json({
 			ok: true,

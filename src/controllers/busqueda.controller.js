@@ -45,6 +45,15 @@ const gatInCollection = async (req, res) => {
 	}
 
 	let resultado = await collection.find({ nombre: regex });
+
+	if (resultado.length === 0) {
+		return res.status(404).json({
+			ok: false,
+			resultado,
+			msj: 'No existe esa busqueda',
+		});
+	}
+
 	res.status(200).json({
 		ok: true,
 		resultado,
