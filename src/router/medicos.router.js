@@ -19,7 +19,6 @@ router.post(
 	[
 		validarJWT,
 		check('nombre', 'el nombre es obligatorio').not().isEmpty(),
-		check('hospital', 'el hospital es obligatorio').isMongoId(),
 		validarCampos,
 	],
 	createMedicos

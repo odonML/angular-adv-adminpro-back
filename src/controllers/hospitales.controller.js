@@ -1,9 +1,15 @@
 const Hospital = require('../models/hospital.model');
 const getHospitales = async (req, res) => {
-	const hospitales = await Hospital.find().populate('usuario', 'nombre');
+	const desde = Number(req.query.desde) || 0;
+
+	const [hospitales, total] = await Promise.all([
+		Hospital.find().populate('usuario', 'nombre').skip(desde).limit(5),
+		Hospital.count(),
+	]);
 	res.status(200).json({
 		ok: true,
 		hospitales,
+		total,
 	});
 };
 
@@ -33,7 +39,7 @@ const createHospitales = async (req, res) => {
 const updateHospitales = async (req, res) => {
 	const id = req.params.id;
 	try {
-		const hospitalDB = await Hospital.findById(id);
+		const hospitalDB = await Hospital.findById({ _id: id });
 		if (!hospitalDB) {
 			return res
 				.status(404)
@@ -42,9 +48,13 @@ const updateHospitales = async (req, res) => {
 
 		const { usuario, ...campos } = req.body;
 
-		const hospitalActualizado = await Hospital.findOneAndUpdate(id, campos, {
-			new: true,
-		});
+		const hospitalActualizado = await Hospital.findOneAndUpdate(
+			{ _id: id },
+			campos,
+			{
+				new: true,
+			}
+		);
 
 		res.status(200).json({ ok: true, hospital: hospitalActualizado });
 	} catch (error) {
@@ -59,14 +69,15 @@ const updateHospitales = async (req, res) => {
 const deleteHospitales = async (req, res) => {
 	const id = req.params.id;
 	try {
-		const hospitalDB = await Hospital.findById(id);
+		const hospitalDB = await Hospital.findById({ _id: id });
+		console.log(id);
 		if (!hospitalDB) {
 			return res
 				.status(404)
 				.json({ ok: false, msj: 'No existe un hospital con ese id' });
 		}
 
-		await Hospital.findOneAndDelete(id);
+		await Hospital.findOneAndDelete({ _id: id });
 
 		res.status(200).json({
 			ok: true,

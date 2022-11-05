@@ -85,8 +85,6 @@ const updateUsuario = async (req, res) => {
 			}
 		);
 
-		// await Usuario.updateOne({ _id: id }, campos);
-
 		res.status(200).json({ ok: true, usuario: usuarioActualizado });
 	} catch (error) {
 		console.log('updateUsuario error ', error);

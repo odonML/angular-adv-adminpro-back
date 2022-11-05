@@ -43,11 +43,15 @@ const updateMedicos = async (req, res) => {
 				.json({ ok: false, msj: 'No existe un medico con ese id' });
 		}
 
-		const { usuario, hospital, ...campos } = req.body;
+		const { usuario, ...campos } = req.body;
 
-		const usuarioActualizado = await Medico.findOneAndUpdate(id, campos, {
-			new: true,
-		});
+		const usuarioActualizado = await Medico.findOneAndUpdate(
+			{ _id: id },
+			campos,
+			{
+				new: true,
+			}
+		);
 
 		res.status(200).json({ ok: true, medico: usuarioActualizado });
 	} catch (error) {
@@ -69,7 +73,7 @@ const deleteMedicos = async (req, res) => {
 				.json({ ok: false, msj: 'No existe un medico con ese id' });
 		}
 
-		await Medico.findOneAndDelete(id);
+		await Medico.findOneAndDelete({ _id: id });
 
 		res.status(200).json({
 			ok: true,
