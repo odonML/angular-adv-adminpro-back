@@ -13,6 +13,7 @@ const getMedicos = async (req, res) => {
 const createMedicos = async (req, res) => {
 	try {
 		let id = req.id;
+
 		let medico = new Medico({
 			usuario: id,
 			...req.body,
